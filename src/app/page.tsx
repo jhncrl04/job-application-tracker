@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { createClient } from "@/lib/supabase-server";
 import SignOutButton from "@/components/SignOutButton";
+import QuickAddForm from "@/components/QuickAddForm";
 
 export const dynamic = "force-dynamic";
 
@@ -23,6 +24,9 @@ export default async function Home() {
         <h1 className="text-2xl font-bold">My Applications</h1>
         <SignOutButton />
       </div>
+
+      <QuickAddForm />
+
       <table className="w-full text-left text-sm">
         <thead>
           <tr className="border-b">

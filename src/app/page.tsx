@@ -11,6 +11,7 @@ import StatusSelect from "@/components/StatusSelect";
 import StatusTabs from "@/components/StatusTabs";
 import Pagination from "@/components/Pagination";
 import SearchBox from "@/components/SearchBox";
+import AppHeader from "@/components/AppHeader";
 
 const PAGE_SIZE = 10;
 const FILTERS: string[] = ["all", ...STATUSES, "review"];
@@ -178,15 +179,14 @@ async function Applications({ searchParams }: { searchParams: SearchParams }) {
 export default function Home({ searchParams }: { searchParams: SearchParams }) {
   return (
     <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
-      <header className="mb-6 flex items-center justify-between gap-4">
-        <h1 className="text-2xl font-semibold tracking-tight">Applications</h1>
-        <div className="flex items-center gap-4">
-          <SignOutButton />
-          <ApplicationDialog className="rounded-lg bg-brand px-4 py-2 text-sm font-medium text-white hover:bg-[#263d66]">
-            Add application
-          </ApplicationDialog>
-        </div>
-      </header>
+      <AppHeader
+        title="Applications"
+        switchTo={{ href: "/stats", label: "Statistics" }}
+      >
+        <ApplicationDialog className="rounded-lg bg-brand px-4 py-2 text-sm font-medium text-white hover:bg-[#263d66]">
+          Add application
+        </ApplicationDialog>
+      </AppHeader>
 
       <Suspense fallback={<p className="text-sm text-muted">Loading…</p>}>
         <Applications searchParams={searchParams} />

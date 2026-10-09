@@ -37,3 +37,10 @@ export const SOURCE_LABEL: Record<string, string> = {
   jobstreet: "JobStreet",
   other: "Other",
 };
+
+export const STATUS_COLOR: Record<Status, string> = {
+  applied: "#4F7FDB",
+  interviewing: "#E0A230",
+  offer: "#3E9B64",
+  rejected: "#C85A70",
+};

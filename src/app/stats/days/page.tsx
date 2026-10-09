@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import Link from "next/link";
+import Link from "@/components/NavLink";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase-server";
 import { fetchAllRows } from "@/lib/rows";
@@ -10,6 +10,8 @@ import {
   monthDetail,
 } from "@/lib/stats";
 import AppHeader from "@/components/AppHeader";
+import LoadingBoundary from "@/components/LoadingBoundary";
+import { StatsSkeleton } from "@/components/skeletons";
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
@@ -174,9 +176,9 @@ export default function DaysPage({
         title="Daily details"
         switchTo={{ href: "/stats", label: "Statistics" }}
       />
-      <Suspense fallback={<p className="text-sm text-muted">Loading…</p>}>
+      <LoadingBoundary fallback={<StatsSkeleton />}>
         <Days searchParams={searchParams} />
-      </Suspense>
+      </LoadingBoundary>
     </main>
   );
 }

@@ -1,12 +1,15 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase-browser";
 
 export default function SignOutButton() {
   const router = useRouter();
+  const [pending, setPending] = useState(false);
 
   async function handleSignOut() {
+    setPending(true);
     await createClient().auth.signOut();
     router.push("/login");
     router.refresh();
@@ -15,9 +18,10 @@ export default function SignOutButton() {
   return (
     <button
       onClick={handleSignOut}
-      className="text-sm text-muted hover:text-ink"
+      disabled={pending}
+      className="text-sm text-muted hover:text-ink disabled:opacity-60"
     >
-      Sign out
+      {pending ? "Signing out…" : "Sign out"}
     </button>
   );
 }

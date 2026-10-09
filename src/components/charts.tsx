@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/NavLink";
 
 type Bar = { label: string; value: number; title: string };
 

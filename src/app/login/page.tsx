@@ -9,9 +9,12 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [pending, setPending] = useState(false);
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
+    setPending(true);
+    setError("");
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithPassword({
       email,
@@ -19,6 +22,7 @@ export default function LoginPage() {
     });
     if (error) {
       setError(error.message);
+      setPending(false);
       return;
     }
     router.push("/");
@@ -46,7 +50,12 @@ export default function LoginPage() {
           required
         />
         {error && <p className="text-sm text-red-600">{error}</p>}
-        <button className="rounded bg-black p-2 text-white">Sign in</button>
+        <button
+          disabled={pending}
+          className="rounded-lg bg-brand px-4 py-2 text-sm font-medium text-white hover:bg-[#263d66] disabled:opacity-60"
+        >
+          {pending ? "Signing in…" : "Sign in"}
+        </button>
       </form>
     </main>
   );

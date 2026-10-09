@@ -12,6 +12,8 @@ import StatusTabs from "@/components/StatusTabs";
 import Pagination from "@/components/Pagination";
 import SearchBox from "@/components/SearchBox";
 import AppHeader from "@/components/AppHeader";
+import LoadingBoundary from "@/components/LoadingBoundary";
+import { ListSkeleton } from "@/components/skeletons";
 
 const PAGE_SIZE = 10;
 const FILTERS: string[] = ["all", ...STATUSES, "review"];
@@ -188,9 +190,9 @@ export default function Home({ searchParams }: { searchParams: SearchParams }) {
         </ApplicationDialog>
       </AppHeader>
 
-      <Suspense fallback={<p className="text-sm text-muted">Loading…</p>}>
+      <LoadingBoundary fallback={<ListSkeleton />}>
         <Applications searchParams={searchParams} />
-      </Suspense>
+      </LoadingBoundary>
     </main>
   );
 }

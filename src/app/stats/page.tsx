@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import Link from "next/link";
+import Link from "@/components/NavLink";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase-server";
 import { fetchAllRows } from "@/lib/rows";
@@ -18,6 +18,8 @@ import {
 import AppHeader from "@/components/AppHeader";
 import { BarChart, BarList } from "@/components/charts";
 import CompanyList from "@/components/CompanyList";
+import LoadingBoundary from "@/components/LoadingBoundary";
+import { StatsSkeleton } from "@/components/skeletons";
 
 const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
 
@@ -272,9 +274,9 @@ export default function StatsPage({
         title="Statistics"
         switchTo={{ href: "/", label: "Applications" }}
       />
-      <Suspense fallback={<p className="text-sm text-muted">Loading…</p>}>
+      <LoadingBoundary fallback={<StatsSkeleton />}>
         <Stats searchParams={searchParams} />
-      </Suspense>
+      </LoadingBoundary>
     </main>
   );
 }

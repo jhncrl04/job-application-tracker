@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/NavLink";
 import { STATUSES, STATUS_LABEL } from "@/lib/constants";
 import { listHref } from "@/lib/url";
 

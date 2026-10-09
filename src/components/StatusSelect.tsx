@@ -32,7 +32,7 @@ export default function StatusSelect({
           await updateStatus(id, next);
         });
       }}
-      className={`cursor-pointer rounded-full border-0 px-3 py-1 text-xs font-medium ${style}`}
+      className={`pill cursor-pointer rounded-full border-0 px-3 py-1 text-xs font-medium ${style}`}
     >
       {STATUSES.map((s) => (
         <option key={s} value={s}>

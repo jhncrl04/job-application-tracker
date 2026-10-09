@@ -105,14 +105,12 @@ async function Applications({ searchParams }: { searchParams: SearchParams }) {
               : "Nothing here right now."}
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-line bg-white">
-          <table className="w-full min-w-[560px] text-left text-sm">
-            <thead className="border-b border-line text-muted">
+        <div className="overflow-hidden rounded-xl border border-line bg-white">
+          <table className="block w-full text-left text-sm sm:table">
+            <thead className="hidden border-b border-line text-muted sm:table-header-group">
               <tr>
                 <th className="px-4 py-3 font-medium">Role</th>
-                <th className="hidden px-4 py-3 font-medium sm:table-cell">
-                  Source
-                </th>
+                <th className="px-4 py-3 font-medium">Source</th>
                 <th className="px-4 py-3 font-medium">Applied</th>
                 <th className="px-4 py-3 font-medium">Status</th>
                 <th className="px-4 py-3">
@@ -120,10 +118,13 @@ async function Applications({ searchParams }: { searchParams: SearchParams }) {
                 </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="block sm:table-row-group">
               {apps.map((a) => (
-                <tr key={a.id} className="border-b border-line last:border-0">
-                  <td className="px-4 py-3 align-top">
+                <tr
+                  key={a.id}
+                  className="grid grid-cols-[1fr_auto] items-center gap-x-3 gap-y-1 border-b border-line px-4 py-3 last:border-0 sm:table-row"
+                >
+                  <td className="col-span-2 p-0 sm:table-cell sm:px-4 sm:py-3 sm:align-top">
                     <div className="flex flex-wrap items-center gap-2">
                       {a.job_url && /^https?:\/\//i.test(a.job_url) ? (
                         <a
@@ -147,16 +148,16 @@ async function Applications({ searchParams }: { searchParams: SearchParams }) {
                       {a.company ?? "Company missing"}
                     </div>
                   </td>
-                  <td className="hidden px-4 py-3 align-top text-muted sm:table-cell">
+                  <td className="hidden p-0 text-muted sm:table-cell sm:px-4 sm:py-3 sm:align-top">
                     {SOURCE_LABEL[a.source] ?? a.source}
                   </td>
-                  <td className="whitespace-nowrap px-4 py-3 align-top text-muted">
+                  <td className="p-0 text-muted sm:table-cell sm:whitespace-nowrap sm:px-4 sm:py-3 sm:align-top">
                     {dateFormat.format(new Date(a.applied_at))}
                   </td>
-                  <td className="px-4 py-3 align-top">
+                  <td className="p-0 sm:table-cell sm:px-4 sm:py-3 sm:align-top">
                     <StatusSelect id={a.id} status={a.status} />
                   </td>
-                  <td className="whitespace-nowrap px-4 py-3 align-top">
+                  <td className="col-span-2 p-0 sm:table-cell sm:whitespace-nowrap sm:px-4 sm:py-3 sm:align-top">
                     <RowActions application={a} />
                   </td>
                 </tr>

@@ -5,6 +5,8 @@ import { deleteApplication } from "@/app/actions";
 import ApplicationDialog from "./ApplicationDialog";
 import type { Application } from "@/lib/types";
 
+const action = "-mx-2 rounded-lg px-2 py-2.5 sm:py-1";
+
 export default function RowActions({
   application,
 }: {
@@ -15,7 +17,7 @@ export default function RowActions({
 
   if (confirming) {
     return (
-      <div className="flex justify-end gap-3 text-sm">
+      <div className="flex flex-wrap justify-start gap-3 text-sm sm:justify-end">
         <button
           disabled={pending}
           onClick={() =>
@@ -23,13 +25,13 @@ export default function RowActions({
               await deleteApplication(application.id);
             })
           }
-          className="font-medium text-[#9B3048] disabled:opacity-60"
+          className={`${action} font-medium text-[#9B3048] disabled:opacity-60`}
         >
           {pending ? "Deleting…" : "Delete permanently"}
         </button>
         <button
           onClick={() => setConfirming(false)}
-          className="text-muted hover:text-ink"
+          className={`${action} text-muted hover:text-ink`}
         >
           Cancel
         </button>
@@ -38,16 +40,16 @@ export default function RowActions({
   }
 
   return (
-    <div className="flex justify-end gap-4 text-sm">
+    <div className="flex justify-start gap-3 text-sm sm:justify-end">
       <ApplicationDialog
         application={application}
-        className="text-muted hover:text-ink"
+        className={`${action} text-muted hover:text-ink`}
       >
         Edit
       </ApplicationDialog>
       <button
         onClick={() => setConfirming(true)}
-        className="text-muted hover:text-[#9B3048]"
+        className={`${action} text-muted hover:text-[#9B3048]`}
       >
         Delete
       </button>

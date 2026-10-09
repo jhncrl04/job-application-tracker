@@ -21,3 +21,11 @@ body {
   outline: 2px solid var(--color-brand);
   outline-offset: 2px;
 }
+
+@media (max-width: 640px) {
+  input,
+  textarea,
+  select:not(.pill) {
+    font-size: 16px;
+  }
+}

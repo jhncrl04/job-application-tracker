@@ -25,7 +25,7 @@ export default function Pagination({
   return (
     <nav
       aria-label="Pagination"
-      className="mt-4 flex items-center justify-between text-sm text-muted"
+      className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm text-muted"
     >
       <p>
         Showing {from} to {to} of {total}

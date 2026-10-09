@@ -77,7 +77,7 @@ export default function ApplicationDialog({
         onClick={(e) => {
           if (e.target === ref.current) ref.current?.close();
         }}
-        className="m-auto w-[min(34rem,calc(100%-2rem))] rounded-xl bg-white p-0 text-ink shadow-xl backdrop:bg-ink/40"
+        className="m-auto max-h-[90dvh] w-[min(34rem,calc(100%-2rem))] overflow-y-auto rounded-xl bg-white p-0 text-ink shadow-xl backdrop:bg-ink/40"
       >
         {open && (
           <form action={handleAction} className="grid gap-4 p-6 sm:grid-cols-2">

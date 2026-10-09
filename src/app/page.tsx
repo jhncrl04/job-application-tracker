@@ -10,6 +10,7 @@ import RowActions from "@/components/RowActions";
 import StatusSelect from "@/components/StatusSelect";
 import StatusTabs from "@/components/StatusTabs";
 import Pagination from "@/components/Pagination";
+import SearchBox from "@/components/SearchBox";
 
 const PAGE_SIZE = 10;
 const FILTERS: string[] = ["all", ...STATUSES, "review"];
@@ -21,7 +22,16 @@ const dateFormat = new Intl.DateTimeFormat("en-PH", {
   timeZone: "Asia/Manila",
 });
 
-type SearchParams = Promise<{ page?: string; status?: string }>;
+type SearchParams = Promise<{ page?: string; status?: string; q?: string }>;
+
+// strips characters that have special meaning in database search filters
+function cleanQuery(raw: string | undefined) {
+  return (raw ?? "")
+    .replace(/[%,()"\\*_]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 100);
+}
 
 async function Applications({ searchParams }: { searchParams: SearchParams }) {
   const auth = await createClient();
@@ -31,14 +41,18 @@ async function Applications({ searchParams }: { searchParams: SearchParams }) {
   if (!user) redirect("/login");
 
   const params = await searchParams;
+  const q = cleanQuery(params.q);
   const status = FILTERS.includes(params.status ?? "")
     ? (params.status as string)
     : "all";
 
-  // tab counts
-  const { data: rows } = await supabase
-    .from("applications")
-    .select("status, needs_review");
+  const search = q ? `job_title.ilike.%${q}%,company.ilike.%${q}%` : null;
+
+  // tab counts (respecting the search)
+  let countQuery = supabase.from("applications").select("status, needs_review");
+  if (search) countQuery = countQuery.or(search);
+  const { data: rows } = await countQuery;
+
   const counts: Record<string, number> = {
     all: 0,
     review: 0,
@@ -67,6 +81,7 @@ async function Applications({ searchParams }: { searchParams: SearchParams }) {
     .select("*")
     .order("applied_at", { ascending: false })
     .order("created_at", { ascending: false });
+  if (search) query = query.or(search);
   if (status === "review") query = query.eq("needs_review", true);
   else if (status !== "all") query = query.eq("status", status);
 
@@ -75,13 +90,16 @@ async function Applications({ searchParams }: { searchParams: SearchParams }) {
 
   return (
     <>
-      <StatusTabs active={status} counts={counts} />
+      <SearchBox q={q} status={status} />
+      <StatusTabs active={status} counts={counts} q={q} />
 
       {apps.length === 0 ? (
         <div className="rounded-xl border border-line bg-white px-6 py-12 text-center text-sm text-muted">
-          {status === "all"
-            ? "No applications yet. Add one with the button above, or wait for the next email sync."
-            : "Nothing here right now."}
+          {q
+            ? `No applications match “${q}”.`
+            : status === "all"
+              ? "No applications yet. Add one with the button above, or wait for the next email sync."
+              : "Nothing here right now."}
         </div>
       ) : (
         <div className="overflow-x-auto rounded-xl border border-line bg-white">
@@ -151,6 +169,7 @@ async function Applications({ searchParams }: { searchParams: SearchParams }) {
         total={total}
         pageSize={PAGE_SIZE}
         status={status}
+        q={q}
       />
     </>
   );

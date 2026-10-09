@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { STATUSES, STATUS_LABEL } from "@/lib/constants";
+import { listHref } from "@/lib/url";
 
 const TABS = [
   { key: "all", label: "All" },
@@ -10,9 +11,11 @@ const TABS = [
 export default function StatusTabs({
   active,
   counts,
+  q,
 }: {
   active: string;
   counts: Record<string, number>;
+  q: string;
 }) {
   return (
     <nav
@@ -24,7 +27,7 @@ export default function StatusTabs({
         return (
           <Link
             key={t.key}
-            href={t.key === "all" ? "/" : `/?status=${t.key}`}
+            href={listHref({ status: t.key, q })}
             aria-current={isActive ? "page" : undefined}
             className={`-mb-px whitespace-nowrap border-b-2 px-3 py-2 text-sm ${
               isActive

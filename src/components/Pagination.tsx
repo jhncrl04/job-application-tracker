@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { listHref } from "@/lib/url";
 
 export default function Pagination({
   page,
@@ -6,26 +7,19 @@ export default function Pagination({
   total,
   pageSize,
   status,
+  q,
 }: {
   page: number;
   totalPages: number;
   total: number;
   pageSize: number;
   status: string;
+  q: string;
 }) {
   if (total === 0) return null;
 
   const from = (page - 1) * pageSize + 1;
   const to = Math.min(page * pageSize, total);
-
-  const href = (p: number) => {
-    const q = new URLSearchParams();
-    if (status !== "all") q.set("status", status);
-    if (p > 1) q.set("page", String(p));
-    const s = q.toString();
-    return s ? `/?${s}` : "/";
-  };
-
   const btn = "rounded-lg border border-line bg-white px-3 py-1.5";
 
   return (
@@ -39,7 +33,7 @@ export default function Pagination({
       <div className="flex items-center gap-3">
         {page > 1 ? (
           <Link
-            href={href(page - 1)}
+            href={listHref({ status, q, page: page - 1 })}
             className={`${btn} text-ink hover:bg-mist`}
           >
             Previous
@@ -52,7 +46,7 @@ export default function Pagination({
         </span>
         {page < totalPages ? (
           <Link
-            href={href(page + 1)}
+            href={listHref({ status, q, page: page + 1 })}
             className={`${btn} text-ink hover:bg-mist`}
           >
             Next
